@@ -19,7 +19,7 @@ public class Disassembly {
 		String line;
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		writer = new BufferedWriter
-			    (new OutputStreamWriter(new FileOutputStream("disassembly.txt"),"UTF-8"));;
+			    (new OutputStreamWriter(new FileOutputStream("disassembly.txt"),"UTF-8"));
 		while ((line = br.readLine()) != null) {
 			String opcode = null;
 			String lmb = line.substring(0, 3);
@@ -128,17 +128,17 @@ public class Disassembly {
 		{
 			switch(opcode)
 			{
-			case "000": instruction = "ADDI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);immediate_value = signedBinary(line.substring(13));
-			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rs+", R"+rt+", #"+immediate_value);writer.newLine();
+			case "000": instruction = "ADDI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);immediate_value = signedBinary(line.substring(16));
+			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rt+", R"+rs+", #"+immediate_value);writer.newLine();
 			break;
-			case "001": instruction = "ANDI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);		immediate_value = Integer.parseInt(line.substring(13),2);	
-			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rs+", R"+rt+", #"+immediate_value);writer.newLine();
+			case "001": instruction = "ANDI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);		immediate_value = Integer.parseInt(line.substring(16),2);	
+			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rt+", R"+rs+", #"+immediate_value);writer.newLine();
 			break;
-			case "010": instruction = "ORI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);immediate_value = Integer.parseInt(line.substring(13),2);
-			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rs+", R"+rt+", #"+immediate_value);writer.newLine();
+			case "010": instruction = "ORI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);immediate_value = Integer.parseInt(line.substring(16),2);
+			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rt+", R"+rs+", #"+immediate_value);writer.newLine();
 			break;
-			case "011": instruction = "XORI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);immediate_value = Integer.parseInt(line.substring(13),2);
-			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rs+", R"+rt+", #"+immediate_value);writer.newLine();
+			case "011": instruction = "XORI";memoryAddress+=4;rs=Integer.parseInt(line.substring(3, 8),2);rt= Integer.parseInt(line.substring(8, 13),2);immediate_value = Integer.parseInt(line.substring(16),2);
+			writer.write(line+"\t"+memoryAddress+"\t"+instruction+" R"+rt+", R"+rs+", #"+immediate_value);writer.newLine();
 			break;
 
 			}
