@@ -47,64 +47,11 @@ public class Simulator {
 		writer = new BufferedWriter
 			    (new OutputStreamWriter(new FileOutputStream("simulation.txt"),"UTF-8"));;
 		while(addressOpcodeMap.containsKey(address)){	
-			writer.write("--------------------");
-			writer.newLine();
-			writer.write("Cycle:"+(++cycle)+"\t"+address+"\t"+addressOpcodeMap.get(address));
-			writer.newLine();
-			writer.newLine();
-			writer.write("Registers");
-			writer.newLine();
-			writer.write("R00:"+"\t"+registerMap.get("R0")+"\t"+registerMap.get("R1")+"\t"+registerMap.get("R2")
-					+"\t"+registerMap.get("R3")+"\t"+registerMap.get("R4")+"\t"+registerMap.get("R5")
-					+"\t"+registerMap.get("R6")+"\t"+registerMap.get("R7"));
-			writer.newLine();
-			writer.write("R08:"+"\t"+registerMap.get("R8")+"\t"+registerMap.get("R9")+"\t"+registerMap.get("R10")
-					+"\t"+registerMap.get("R11")+"\t"+registerMap.get("R12")+"\t"+registerMap.get("R13")
-					+"\t"+registerMap.get("R14")+"\t"+registerMap.get("R15"));
-			writer.newLine();
-			writer.write("R16:"+"\t"+registerMap.get("R16")+"\t"+registerMap.get("R17")+"\t"+registerMap.get("R18")
-					+"\t"+registerMap.get("R19")+"\t"+registerMap.get("R20")+"\t"+registerMap.get("R21")
-					+"\t"+registerMap.get("R22")+"\t"+registerMap.get("R23"));
-			writer.newLine();
-			writer.write("R24:"+"\t"+registerMap.get("R24")+"\t"+registerMap.get("R25")+"\t"+registerMap.get("R26")
-					+"\t"+registerMap.get("R27")+"\t"+registerMap.get("R28")+"\t"+registerMap.get("R29")
-					+"\t"+registerMap.get("R30")+"\t"+registerMap.get("R31"));
-			writer.newLine();
-			writer.newLine();
-			writer.write("Data");
-			writer.newLine();
-			int test=dataAddress;
-			while(addressDataMap.containsKey(test))
-			{
-				writer.write(test+":");
-				writer.write("\t"+addressDataMap.get(test));
-				test+=4;
-				if(addressDataMap.containsKey(test))
-				writer.write("\t"+addressDataMap.get(test));
-				test+=4;
-				if(addressDataMap.containsKey(test))
-				writer.write("\t"+addressDataMap.get(test));
-				test+=4;
-				if(addressDataMap.containsKey(test))
-				writer.write("\t"+addressDataMap.get(test));
-				test+=4;
-				if(addressDataMap.containsKey(test))
-				writer.write("\t"+addressDataMap.get(test));
-				test+=4;
-				if(addressDataMap.containsKey(test))
-				writer.write("\t"+addressDataMap.get(test));
-				test+=4;
-				if(addressDataMap.containsKey(test))
-				writer.write("\t"+addressDataMap.get(test));
-				test+=4;
-				if(addressDataMap.containsKey(test))
-				writer.write("\t"+addressDataMap.get(test));
-				writer.newLine();
-				test+=4;
-			}
+			
 			//System.out.println(entry.getKey()+","+entry.getValue());
 			opcode=addressOpcodeMap.get(address).split("\\s+");
 						int value;
+						int prevAdd=address;
 			switch(opcode[0])
 			{
 			case "ADD": opcode[1] = opcode[1].substring(0, opcode[1].length() - 1);
@@ -163,14 +110,16 @@ public class Simulator {
 			case "BREAK": address+=4;
 			break;
 			case "SW": opcode[1] = opcode[1].substring(0, opcode[1].length() - 1);
-			int offset= Integer.parseInt(opcode[2].substring(0,3));
-			String base= (opcode[2].substring(4,6));
+			String[] tmp = opcode[2].split("\\(");
+			int offset= Integer.parseInt(tmp[0]);
+			String base=tmp[1].substring(0, tmp[1].length() - 1);
 			addressDataMap.put(registerMap.get(base)+offset, registerMap.get(opcode[1]));
 			address+=4;
 			break;
 			case "LW": opcode[1] = opcode[1].substring(0, opcode[1].length() - 1);
-			int offset1= Integer.parseInt(opcode[2].substring(0,3));
-			String base1= (opcode[2].substring(4,6));
+			String[] tmp1 = opcode[2].split("\\(");
+			int offset1= Integer.parseInt(tmp1[0]);
+			String base1=tmp1[1].substring(0, tmp1[1].length() - 1);
 			registerMap.put(opcode[1], addressDataMap.get(registerMap.get(base1)+offset1));
 			address+=4;
 			break;
@@ -199,6 +148,61 @@ public class Simulator {
 			address+=4;
 			break;
 			}
+			writer.write("--------------------");
+			writer.newLine();
+			writer.write("Cycle:"+(++cycle)+"\t"+prevAdd+"\t"+addressOpcodeMap.get(prevAdd));
+			writer.newLine();
+			writer.newLine();
+			writer.write("Registers");
+			writer.newLine();
+			writer.write("R00:"+"\t"+registerMap.get("R0")+"\t"+registerMap.get("R1")+"\t"+registerMap.get("R2")
+					+"\t"+registerMap.get("R3")+"\t"+registerMap.get("R4")+"\t"+registerMap.get("R5")
+					+"\t"+registerMap.get("R6")+"\t"+registerMap.get("R7"));
+			writer.newLine();
+			writer.write("R08:"+"\t"+registerMap.get("R8")+"\t"+registerMap.get("R9")+"\t"+registerMap.get("R10")
+					+"\t"+registerMap.get("R11")+"\t"+registerMap.get("R12")+"\t"+registerMap.get("R13")
+					+"\t"+registerMap.get("R14")+"\t"+registerMap.get("R15"));
+			writer.newLine();
+			writer.write("R16:"+"\t"+registerMap.get("R16")+"\t"+registerMap.get("R17")+"\t"+registerMap.get("R18")
+					+"\t"+registerMap.get("R19")+"\t"+registerMap.get("R20")+"\t"+registerMap.get("R21")
+					+"\t"+registerMap.get("R22")+"\t"+registerMap.get("R23"));
+			writer.newLine();
+			writer.write("R24:"+"\t"+registerMap.get("R24")+"\t"+registerMap.get("R25")+"\t"+registerMap.get("R26")
+					+"\t"+registerMap.get("R27")+"\t"+registerMap.get("R28")+"\t"+registerMap.get("R29")
+					+"\t"+registerMap.get("R30")+"\t"+registerMap.get("R31"));
+			writer.newLine();
+			writer.newLine();
+			writer.write("Data");
+			writer.newLine();
+			int test=dataAddress;
+			while(addressDataMap.containsKey(test))
+			{
+				writer.write(test+":");
+				writer.write("\t"+addressDataMap.get(test));
+				test+=4;
+				if(addressDataMap.containsKey(test))
+				writer.write("\t"+addressDataMap.get(test));
+				test+=4;
+				if(addressDataMap.containsKey(test))
+				writer.write("\t"+addressDataMap.get(test));
+				test+=4;
+				if(addressDataMap.containsKey(test))
+				writer.write("\t"+addressDataMap.get(test));
+				test+=4;
+				if(addressDataMap.containsKey(test))
+				writer.write("\t"+addressDataMap.get(test));
+				test+=4;
+				if(addressDataMap.containsKey(test))
+				writer.write("\t"+addressDataMap.get(test));
+				test+=4;
+				if(addressDataMap.containsKey(test))
+				writer.write("\t"+addressDataMap.get(test));
+				test+=4;
+				if(addressDataMap.containsKey(test))
+				writer.write("\t"+addressDataMap.get(test));
+				writer.newLine();
+				test+=4;
+			}				writer.newLine();
 
 		}
 		writer.close();
